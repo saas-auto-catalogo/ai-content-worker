@@ -1,5 +1,8 @@
-# 🧠 Auto Catálogo — AI Content Worker
-> **Pipeline Autônomo de Pesquisa Profunda (Open Deep Research via LangGraph) e Redação Técnica com Google Gemini 2.5 Flash** para o Blog *Audience First* do ecossistema SaaS Auto Catálogo.
+# Auto Catálogo — AI Content Worker
+
+> **Pipeline autônomo de pesquisa profunda (Open Deep Research via LangGraph) e redação técnica com Google Gemini** para o Blog *Audience First* do ecossistema SaaS Auto Catálogo.
+
+**Wiki:** [ai-content-worker](https://github.com/saas-auto-catalogo/.github/blob/main/docs/wiki/ai-content-worker.md)
 
 ---
 
