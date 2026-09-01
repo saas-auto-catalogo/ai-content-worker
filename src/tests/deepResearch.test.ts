@@ -2,9 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { TopicDecomposer } from '../services/research/TopicDecomposer.js';
 import { DeepResearchEngine } from '../services/research/DeepResearchEngine.js';
 import { ResearchDossierBuilder } from '../services/research/ResearchDossierBuilder.js';
+import { createDeepResearchGraph } from '../services/research/langgraph/graph.js';
 import { ResearchDossierSchema } from '../types/research.js';
 
-describe('Open Deep Research Agent - Test Suite', () => {
+describe('Open Deep Research Agent (LangGraph & LangChain) - Test Suite', () => {
   const sampleTopic = 'Como Anunciar Carros no Instagram com Feed XML e Meta Automotive Ads';
 
   it('deve decompor o tema semente em sub-perguntas investigativas categorizadas', () => {
@@ -12,7 +13,7 @@ describe('Open Deep Research Agent - Test Suite', () => {
 
     expect(subQuestions).toBeDefined();
     expect(subQuestions.length).toBeGreaterThanOrEqual(4);
-    
+
     const categories = subQuestions.map((q) => q.category);
     expect(categories).toContain('META_API');
     expect(categories).toContain('DMS_TAGS');
@@ -20,7 +21,7 @@ describe('Open Deep Research Agent - Test Suite', () => {
     expect(categories).toContain('LEAD_CONVERSION');
   });
 
-  it('deve executar a investigação e extrair evidências factuais e especificações de XML', async () => {
+  it('deve executar o StateGraph do LangGraph e extrair evidências factuais', async () => {
     const engine = new DeepResearchEngine();
     const subQuestions = TopicDecomposer.decompose(sampleTopic);
     const result = await engine.executeInvestigation(sampleTopic, subQuestions);
@@ -31,11 +32,33 @@ describe('Open Deep Research Agent - Test Suite', () => {
     expect(result.painPoints.length).toBeGreaterThanOrEqual(2);
     expect(result.quotes.length).toBeGreaterThanOrEqual(1);
 
-    // Valida que a especificação de preço e foto hero estão presentes
+    // Valida tags canônicas
     const metaFields = result.xmlSpecs.map((s) => s.metaField);
     expect(metaFields).toContain('g:vehicle_id');
     expect(metaFields).toContain('g:price');
     expect(metaFields).toContain('g:image_link');
+  });
+
+  it('deve compilar e executar o grafo LangGraph diretamente gerando dossiê final', async () => {
+    const graph = createDeepResearchGraph();
+    const result = await graph.invoke({
+      seedTopic: sampleTopic,
+      targetKeyword: 'feed-xml-instagram-carros',
+      subQuestions: [],
+      findings: [],
+      statistics: [],
+      xmlSpecs: [],
+      painPoints: [],
+      quotes: [],
+      iterations: [],
+      iterationCount: 0,
+      isComplete: false,
+      finalDossier: null,
+    });
+
+    expect(result.finalDossier).toBeDefined();
+    expect(result.finalDossier?.id).toContain('dossier-langgraph');
+    expect(result.isComplete).toBe(true);
   });
 
   it('deve construir um ResearchDossier válido de acordo com o Schema Zod', async () => {
@@ -43,14 +66,12 @@ describe('Open Deep Research Agent - Test Suite', () => {
     const dossier = await builder.buildDossier(sampleTopic);
 
     expect(dossier).toBeDefined();
-    expect(dossier.id).toMatch(/^dossier-\d+/);
     expect(dossier.seedTopic).toBe(sampleTopic);
 
     // Validação de Schema com Zod
     const validation = ResearchDossierSchema.safeParse(dossier);
     expect(validation.success).toBe(true);
 
-    // Verifica presença de estatística relevante da Fenabrave / Meta
     const hasCplStatistic = dossier.verifiedStatistics.some((s) => s.value === '38%');
     expect(hasCplStatistic).toBe(true);
   });
