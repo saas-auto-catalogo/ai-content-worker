@@ -1,0 +1,26 @@
+{
+  "name": "@saas-auto-catalogo/ai-content-worker",
+  "version": "1.0.0",
+  "description": "Worker autônomo de Pesquisa Profunda (Open Deep Research) e Redação com Gemini para o Blog Audience First do Auto Catálogo SaaS",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "research": "tsx src/cli/runResearch.ts",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.0",
+    "dotenv": "^16.4.7",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.5"
+  }
+}
