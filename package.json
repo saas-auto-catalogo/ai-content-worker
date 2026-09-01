@@ -10,6 +10,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "research": "tsx src/cli/runResearch.ts",
+    "write-article": "tsx src/cli/runArticleGeneration.ts",
     "start": "node dist/index.js"
   },
   "dependencies": {
