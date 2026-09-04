@@ -1,5 +1,7 @@
 # Auto Catálogo — AI Content Worker
 
+[![CI](https://github.com/saas-auto-catalogo/ai-content-worker/actions/workflows/ci.yml/badge.svg)](https://github.com/saas-auto-catalogo/ai-content-worker/actions/workflows/ci.yml)
+
 > **Pipeline autônomo de pesquisa profunda (Open Deep Research via LangGraph) e redação técnica com Google Gemini** para o Blog *Audience First* do ecossistema SaaS Auto Catálogo.
 
 **Wiki:** [ai-content-worker](https://github.com/saas-auto-catalogo/.github/blob/main/docs/wiki/ai-content-worker.md)
